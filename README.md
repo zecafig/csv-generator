@@ -1,2 +1,2 @@
 # csv-generator
-Create csv files with random information.
+Create a csv file with random information.
