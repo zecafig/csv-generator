@@ -1,0 +1,42 @@
+Faker informations to associate with user input.
+This will be useful, on this case...
+
+fake.phone_number()
+# '81 3340-8205'
+
+fake.name_female()
+# 'Stella Sales'
+
+fake.name_male()
+# 'Luiz Gustavo Aragão'
+
+fake.name()
+# 'Luiza Correia'
+
+fake.boolean(chance_of_getting_true=50)
+# False
+
+fake.job()
+# 'Civil engineer, contracting'
+
+fake.safe_email(*args, **kwargs)
+# 'carolina14@example.br'
+
+fake.date(pattern="%Y-%m-%d", end_datetime=None)
+# '1986-07-13'
+
+fake.company()
+# 'Silveira S.A.'
+
+fake.street_name()
+# 'Trecho Ferreira'
+
+fake.state_abbr()
+# 'GO'
+
+fake.city()
+# 'Peixoto de Silveira'
+
+These "Social Classes" options must be included:
+
+A, B1, B2, C1, C2, D, E  
