@@ -13,7 +13,23 @@ listoffields = [1,2,3]
 valid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 validnumfields = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,99]
 invalid_input = True
-#fielddict = {'1':'i+', '2':'faker.name()', '3':'fake.name_female()', '4':'fake.name_male()', '5':'fake.phone_number()', '6':'fake.phone_number()', '7':'random.choice(['True','False'])', '8':'fake.job()', '9':'fake.safe_email(*args, **kwargs)', '10':'fake.date(pattern="%Y-%m-%d", end_datetime=None)', '11':'fake.company()', '12':'fake.street_name()', '13':'fake.city()', '14':'fake.state_abbr()', '15':'random.choice(['A','B1','B2','C1','C2','D','E'])', '16':'random.choice(['MALE','FEMALE'])'}
+fielddict = {
+ '1':'i+',
+ '2':'faker.name()',
+ '3':'fake.name_female()',
+ '4':'fake.name_male()',
+ '5':'fake.phone_number()',
+ '6':'fake.phone_number()',
+ '7':'random.choice([True, False])',
+ '8':'fake.job()',
+ '9':'fake.safe_email(*args, **kwargs)',
+ '10':'fake.date(pattern="%Y-%m-%d", end_datetime=None)',
+ '11':'fake.company()',
+ '12':'fake.street_name()',
+ '13':'fake.city()',
+ '14':'fake.state_abbr()',
+ '15': "random.choice(['A','B1','B2','C1','C2','D','E'])",
+ '16':'random.choice(["MALE","FEMALE"])'}
 
       
 while True:
