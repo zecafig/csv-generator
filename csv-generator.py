@@ -75,7 +75,9 @@ def start():
             break  
 
     if numfields == 0:
-        print(fieldlist)
+        for i, z in enumerate(fieldlist):
+            print(str(i)+" - "+z) 
+        
 
     elif numfields != 99:
         if numfields in valid:
@@ -97,9 +99,11 @@ def start():
         print('99 fecha a lista e gera o csv com os seguintes campos:')
         print(listoffields)
         print('aqui TEM QUE PARAR E DAI vem a instrucao de gerar os dados com os campos do faker')
-        
+
+        # imprime o header do csv        
         # w.writerow(("email", "name", "mother", "mobile", "gender", "birthday"))
 
+        # imprime o header do csv       
         # for i in range(lines):
         #     w.writerow((
         #     	fk.email(), 
@@ -115,4 +119,3 @@ def start():
 
 while invalid_input:
     start()
-    
