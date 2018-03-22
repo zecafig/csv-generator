@@ -1,56 +1,116 @@
+#!/usr/bin/env python3
+
 import csv
 import random
 import datetime
+import sys
 from faker import Faker
 
-fk = Faker("pt_BR")
+fake = Faker("pt_BR")
 filename = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-z = open("%s.csv" % filename, "w")
-w = csv.writer(z)
+outcsvfile = open("%s.csv" % filename, "w")
+w = csv.writer(outcsvfile, dialect="excel")
 listoffields = []
-a = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-listoffields = []
-valid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-validnumfields = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,99]
 invalid_input = True
 
-fielddict = {
-'1':'i+',
-'2':'faker.name()',
-'3':'fake.name_female()',
-'4':'fake.name_male()',
-'5':'fake.phone_number()',
-'6':'fake.phone_number()',
-'7':'random.choice([True, False])',
-'8':'fake.job()',
-'9':'fake.safe_email(*args, **kwargs)',
-'10':'fake.date(pattern="%Y-%m-%d", end_datetime=None)',
-'11':'fake.company()',
-'12':'fake.street_name()',
-'13':'fake.city()',
-'14':'fake.state_abbr()',
-'15': "random.choice(['A','B1','B2','C1','C2','D','E'])",
-'16':'random.choice(["MALE","FEMALE"])'}
-
-fieldlist = [
-"display this information",
-"id",
-"name",
-"mother's name",
-"father's name",
-"phone number",
-"mobile",
-"boolean",
-"job",
-"email",
-"birthday",
-"company",
-"address",
-"city",
-"state",
-"social class",
-"gender"
-]
+ftypes = (
+    (
+        "Name",                     # Field Name
+        fake,                       # Field Generation Object
+        "name",                     # Field Generation Method Name
+        ()                          # Parameters
+    ),
+    (
+        "Mother Name",
+        fake,
+        "name_female",
+        ()
+    ),
+    (
+        "Father Name",
+        fake,
+        "name_male",
+        ()
+    ),
+    (
+        "Phone Number",
+        fake,
+        "phone_number",
+        ()
+    ),
+    (
+        "Job",
+        fake,
+        "job",
+        ()
+    ),
+    (
+        "Email",
+        fake,
+        "safe_email",
+        ()
+    ),
+    (
+        "Birthday",
+        fake,
+        "date",
+        ("%Y-%m-%d", None)
+    ),
+    (
+        "Company",
+        fake,
+        "company",
+        ()
+    ),
+    (
+        "Street Name",
+        fake,
+        "street_name",
+        ()
+    ),
+    (
+        "City",
+        fake,
+        "city",
+        ()
+    ),
+    (
+        "State",
+        fake,
+        "state_abbr",
+        ()
+    ),
+    (
+        "CPF",
+        fake,
+        "cpf",
+        ()
+    ),
+    (
+        "CNPJ",
+        fake,
+        "cnpj",
+        ()
+    ),
+    (
+        "Social Class",
+        random,
+        "choice",
+        (['A','B1','B2','C1','C2','DE'])
+    ),
+    (
+        "Gender",
+        random,
+        "choice",
+        (["Male", "Female"])
+    ),
+    (
+        "Boolean",
+        random,
+        "choice",
+        ([True, False])
+    ),
+)
    
 while True:
     try:
@@ -58,64 +118,64 @@ while True:
         if lines <=0:
             print("Not an option! Try again. ")
             continue    
-    except ValueError:
+        break
+    except :
         print("Not an option! Try again. ") 
         continue
-    else:
-        break    
 
-def start():
-    while True:
-        try:
-            numfields = int(input('Choose fields to  your csv. 0 to list possible fields. 99 to finish and generate csv.'))
-        except ValueError:
-            print("Not an option! Try again. ") 
-            continue
+while True:
+    
+        selected_field = input('Choose fields to  your csv. [h - list possible fields. q - finish and generate csv. r - reset] ')
+
+        if selected_field in ["h","?"]:
+            # Help
+            for i, z in enumerate(ftypes):
+                print(str(i) + " - " + z[0]) 
+        elif selected_field == "r":
+            # Reset List
+            listoffields = []
+            print("List Reseted!")
+        elif selected_field == "q":
+            # Finish and Gen
+            print("Generating CSV...")
+
+            # CSV Header  
+            h = []
+            for col in listoffields:    
+                h.append(ftypes[col][0])
+            w.writerow(h)
+
+            # CSV Dynamic Data In Selected Row Order
+            for row in range(lines):
+                r = []
+                for col in listoffields:
+                    if ftypes[col][3] and len(ftypes[col][3]) > 0:
+                        r.append(getattr(ftypes[col][1], ftypes[col][2])(ftypes[col][3]))
+                    else:
+                        r.append(getattr(ftypes[col][1], ftypes[col][2])())
+                
+                w.writerow(r)
+                #print(r)
+
+            print("Exported file: %s.csv" % filename )
+            outcsvfile.close()
+            sys.exit(0)
         else:
-            break  
+            try:
+                selected_field = int(selected_field)
 
-    if numfields == 0:
-        for i, z in enumerate(fieldlist):
-            print(str(i)+" - "+z) 
-        
+                if selected_field < 0 or selected_field > len(ftypes) - 1:
+                    raise Exception()
 
-    elif numfields != 99:
-        if numfields in valid:
-            if numfields not in listoffields:
-                listoffields.append(numfields)
+                if selected_field not in listoffields:
+                    listoffields.append(selected_field)
+                    print('Selected fields:')
+                    print(listoffields)
+                else:
+                    print('Field already exists. Removing Field: %s' % selected_field)
+                    listoffields.remove(selected_field)
+                    print(listoffields)
+            except:
+                print('Invalid option! Try again. ')
                 print('Selected fields:')
                 print(listoffields)
-            else:
-                print('Field already exists')
-                print(listoffields)
-                start()
-        else:
-            print('Not an option! Try again. ')
-            print('Selected fields:')
-            print(listoffields)
-            start()
-
-    else:
-        print('99 fecha a lista e gera o csv com os seguintes campos:')
-        print(listoffields)
-        print('aqui TEM QUE PARAR E DAI vem a instrucao de gerar os dados com os campos do faker')
-
-        # imprime o header do csv        
-        # w.writerow(("email", "name", "mother", "mobile", "gender", "birthday"))
-
-        # imprime o header do csv       
-        # for i in range(lines):
-        #     w.writerow((
-        #     	fk.email(), 
-        #     	fk.name(), 
-        #     	fk.name(), 
-        #         fk.phone_number(),
-        #     	"male" if random.randrange(2) == 0 else "female", 
-        #     	fk.date()
-        #     ))
-
-        # print("Exported file: %s.csv" % filename )
-        exit()
-
-while invalid_input:
-    start()
