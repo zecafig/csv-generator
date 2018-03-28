@@ -54,7 +54,7 @@ ftypes = (
         "Birthday",
         fake,
         "date",
-        ("%Y-%m-%d", None)
+        ()
     ),
     (
         "Company",
